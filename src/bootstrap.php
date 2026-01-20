@@ -6,28 +6,76 @@ use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Utils;
 use HttpSoft\Emitter\SapiEmitter;
+use League\Route\Router;
 
 ini_set("display_errors", 1);
 
 require dirname(__DIR__) . "/vendor/autoload.php";
 
-$reqeust = ServerRequest::fromGlobals();
+$request = ServerRequest::fromGlobals();
 
-$page = $reqeust->getQueryParams()["page"];
+$router = new Router;
 
-ob_start();
+$router->get("/", function () {
+    $stream = Utils::streamFor("dit is de homepagina voor de zoutstrooi management!");
 
-require dirname(__DIR__) . "/{$page}.php";
+    $response = new Response();
 
-$content = ob_get_clean();
+    $response = $response->withBody($stream);
 
-$stream = Utils::streamFor($content);
+    return $response;
 
-$response = new Response();
+});
 
-$response = $response->withStatus(418)
-    ->withHeader("X-Powered-By", "PHP")
-    ->withBody($stream);
+
+$router->get("/products", function () {
+    $stream = Utils::streamFor("List of Products");
+
+    $response = new Response();
+
+    $response = $response->withBody($stream);
+
+    return $response;
+
+});
+
+$router->get("/product/{id:number}", function ($request, $args) {
+
+    $id = $args["id"];
+
+    $stream = Utils::streamFor("Single product with product ID $id");
+
+    $response = new Response();
+
+    $response = $response->withBody($stream);
+
+    return $response;
+
+});
+
+$router->get("/wegen", function () {
+    $stream = Utils::streamFor("hier zie je alle wegen");
+
+    $response = new Response();
+
+    $response = $response->withBody($stream);
+
+    return $response;
+
+});
+
+$router->get("/wegen/nieuw", function () {
+    $stream = Utils::streamFor("hier maak je nieuwe wegen aan");
+
+    $response = new Response();
+
+    $response = $response->withBody($stream);
+
+    return $response;
+
+});
+
+$response = $router->dispatch($request);
 
 $emitter = new SapiEmitter();
 
