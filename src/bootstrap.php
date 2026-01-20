@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
+use App\Controllers\NieuweWegenController;
+use App\Controllers\WegenController;
 use GuzzleHttp\Psr7\ServerRequest;
-use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\Utils;
 use HttpSoft\Emitter\SapiEmitter;
 use League\Route\Router;
+use App\Controllers\HomeController;
+use App\Controllers\ProductController;
 
 ini_set("display_errors", 1);
 
@@ -16,64 +18,15 @@ $request = ServerRequest::fromGlobals();
 
 $router = new Router;
 
-$router->get("/", function () {
-    $stream = Utils::streamFor("dit is de homepagina voor de zoutstrooi management!");
+$router->get("/", [HomeController::class, "index"]);
 
-    $response = new Response();
+$router->get("/products", [ProductController::class, "index"]);
 
-    $response = $response->withBody($stream);
+$router->get("/product/{id:number}", [ProductController::class, "show"]);
 
-    return $response;
+$router->get("/wegen", [WegenController::class, "wegen"]);
 
-});
-
-
-$router->get("/products", function () {
-    $stream = Utils::streamFor("List of Products");
-
-    $response = new Response();
-
-    $response = $response->withBody($stream);
-
-    return $response;
-
-});
-
-$router->get("/product/{id:number}", function ($request, $args) {
-
-    $id = $args["id"];
-
-    $stream = Utils::streamFor("Single product with product ID $id");
-
-    $response = new Response();
-
-    $response = $response->withBody($stream);
-
-    return $response;
-
-});
-
-$router->get("/wegen", function () {
-    $stream = Utils::streamFor("hier zie je alle wegen");
-
-    $response = new Response();
-
-    $response = $response->withBody($stream);
-
-    return $response;
-
-});
-
-$router->get("/wegen/nieuw", function () {
-    $stream = Utils::streamFor("hier maak je nieuwe wegen aan");
-
-    $response = new Response();
-
-    $response = $response->withBody($stream);
-
-    return $response;
-
-});
+$router->get("/wegen/nieuw", [NieuweWegenController::class, "nieuwewegen"]);
 
 $response = $router->dispatch($request);
 
