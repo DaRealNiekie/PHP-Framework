@@ -4,20 +4,20 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
-use GuzzleHttp\Psr7\HttpFactory;
-use Nyholm\Psr7\Factory\Psr17Factory;
 
-class Nieuwewegencontroller
+class NieuweWegenController
 {
+    public function __construct(private ResponseFactoryInterface $factory)
+    {
+
+    }
     public function nieuwewegen(): ResponseInterface
     {
-        //$factory = new HttpFactory();
-        $factory = new Psr17Factory;
+        $stream = $this->factory->createStream("dit is de nieuwe wegen pagina");
 
-        $stream = $factory->createStream("dit is de nieuwe wegen pagina");
-
-        $response = $factory->createResponse(200);
+        $response = $this->factory->createResponse(200);
 
         $response = $response->withBody($stream);
 
