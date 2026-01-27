@@ -1,26 +1,26 @@
 <?php
-
-
 declare(strict_types=1);
 
 namespace App\Controllers;
 
 
-use GuzzleHttp\Psr7\Utils;
-use Nyholm\Psr7\Response as NyholmResponse;
 use Psr\Http\Message\ResponseInterface;
+use GuzzleHttp\Psr7\HttpFactory;
+use Nyholm\Psr7\Factory\Psr17Factory;
 
-class WegenController
+class wegencontroller
 {
     public function wegen(): ResponseInterface
     {
-        $stream = Utils::streamFor("hier zie je alle wegen!");
+        //$factory = new HttpFactory();
+        $factory = new Psr17Factory;
 
-        $response = new NyholmResponse;
+        $stream = $factory->createStream("dit is de wegen pagina!");
+
+        $response = $factory->createResponse(200);
 
         $response = $response->withBody($stream);
 
         return $response;
-
     }
 }
