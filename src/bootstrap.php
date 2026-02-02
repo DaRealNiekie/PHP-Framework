@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 use App\Controllers\NieuweWegenController;
 use App\Controllers\WegenController;
+use Framework\Template\PlatesRenderer;
+use Framework\Template\renderer;
+use Framework\Template\RendererInterface;
 use GuzzleHttp\Psr7\ServerRequest;
 use HttpSoft\Emitter\SapiEmitter;
 use League\Route\Router;
@@ -21,7 +24,8 @@ require dirname(__DIR__) . "/vendor/autoload.php";
 $request = ServerRequest::fromGlobals();
 
 $container = new DI\Container([
-    ResponseFactoryInterface::class => DI\create(HttpFactory::class)
+    ResponseFactoryInterface::class => DI\create(HttpFactory::class),
+    RendererInterface::class => DI\create(PlatesRenderer::class)
 ]);
 
 $router = new Router;
