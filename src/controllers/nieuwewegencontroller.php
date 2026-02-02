@@ -6,16 +6,21 @@ namespace App\Controllers;
 
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
+use Framework\Template\RendererInterface;
 
 class NieuweWegenController
 {
-    public function __construct(private ResponseFactoryInterface $factory)
-    {
+    public function __construct(
+        private ResponseFactoryInterface $factory,
+        private RendererInterface $renderer
+    ) {
 
     }
     public function nieuwewegen(): ResponseInterface
     {
-        $stream = $this->factory->createStream("dit is de nieuwe wegen pagina");
+        $contents = $this->renderer->render("wegennieuw/index");
+
+        $stream = $this->factory->createStream($contents);
 
         $response = $this->factory->createResponse(200);
 

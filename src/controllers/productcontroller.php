@@ -4,18 +4,23 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use Framework\Template\RendererInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 class ProductController
 {
-    public function __construct(private ResponseFactoryInterface $factory)
-    {
+    public function __construct(
+        private ResponseFactoryInterface $factory,
+        private RendererInterface $renderer
+    ) {
 
     }
     public function index(): ResponseInterface
     {
-        $stream = $this->factory->createStream("list of products");
+        $contents = $this->renderer->render("product/index");
+
+        $stream = $this->factory->createStream($contents);
 
         $response = $this->factory->createResponse();
 
@@ -26,9 +31,10 @@ class ProductController
 
     public function show(ServerRequestInterface $request, array $args): ResponseInterface
     {
-        $id = $args["id"];
-
-        $stream = $this->factory->createStream("Single product with product ID $id");
+        $contents = $this->renderer->render("product/show", [
+            "id" => $args["id"]
+        ]);
+        $stream = $this->factory->createStream($contents);
 
         $response = $this->factory->createResponse();
 
