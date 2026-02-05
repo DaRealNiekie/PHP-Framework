@@ -3,30 +3,21 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use DateTime;
+use Framework\Controller\AbstractController;
 
-use Framework\Template\RendererInterface;
-use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
-class HomeController
+
+class HomeController extends AbstractController
 {
     public function __construct(
-        private ResponseFactoryInterface $factory,
-        private RendererInterface $renderer
+        private \DateTime $dt
     ) {
     }
     public function index(): ResponseInterface
     {
-
-        $contents = $this->renderer->render("home/index", [
-            "name" => "<em>DaRealNiekie</em>"
+        return $this->render("home/index", [
+            "name" => $this->dt->format("l")
         ]);
-
-        $stream = $this->factory->createStream($contents);
-
-        $response = $this->factory->createResponse(200);
-
-        $response = $response->withBody($stream);
-
-        return $response;
     }
 }
