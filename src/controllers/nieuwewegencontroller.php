@@ -12,7 +12,11 @@ class NieuweWegenController extends AbstractController
 
     public function nieuwewegen(): ResponseInterface
     {
-        return $this->render("wegennieuw/index");
+        $contents = $this->renderer->render("wegen/nieuw");
+
+        $stream = $this->factory->createStream($contents);
+
+        $response = $this->factory->createResponse(200);
 
     }
 
