@@ -4,42 +4,65 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use Framework\Template\RendererInterface;
+use App\Entities\product;
+
+use Doctrine\ORM\EntityManagerInterface;
+
+use Framework\Controller\AbstractController;
+use PDO;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseFactoryInterface;
-class ProductController
+
+
+
+class ProductController extends AbstractController
 {
-    public function __construct(
-        private ResponseFactoryInterface $factory,
-        private RendererInterface $renderer
-    ) {
+    public function __construct(private EntityManagerInterface $em)
+    {
 
     }
+
     public function index(): ResponseInterface
     {
-        $contents = $this->renderer->render("product/index");
+        $repo = $this->em->getRepository(product::class);
 
-        $stream = $this->factory->createStream($contents);
+        $products = $repo->findall();
 
-        $response = $this->factory->createResponse();
+        return $this->render("product/index", [
+            "products" => $products
+        ]);
 
-        $response = $response->withBody($stream);
-
-        return $response;
     }
 
     public function show(ServerRequestInterface $request, array $args): ResponseInterface
     {
-        $contents = $this->renderer->render("product/show", [
-            "id" => $args["id"]
+        $product = $this->em->find(Product::class, $args["id"]);
+
+        return $this->render("product/show", [
+            "product" => $product
         ]);
-        $stream = $this->factory->createStream($contents);
 
-        $response = $this->factory->createResponse();
+    }
 
-        $response = $response->withBody($stream);
+    public function create(ServerRequestInterface $reqeust): ResponseInterface
+    {
+        if ($reqeust->getMethod() === "POST") {
+            $parameters = $reqeust->getParsedBody();
 
-        return $response;
+            $product = new product;
+
+            $product->setName($parameters["name"]);
+            $product->setDescription($parameters["description"]);
+            $product->setSize((int) $parameters["size"]);
+
+            $this->em->persist($product);
+
+            $this->em->flush();
+
+            return $this->redirect("/product/{$product->getid()}");
+        }
+
+
+        return $this->render("/product/new");
     }
 }
