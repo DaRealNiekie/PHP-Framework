@@ -18,7 +18,7 @@ class NieuweWegenController
     }
     public function nieuwewegen(): ResponseInterface
     {
-        $contents = $this->renderer->render("wegennieuw/index");
+        $contents = $this->renderer->render("wegen/nieuw");
 
         $stream = $this->factory->createStream($contents);
 

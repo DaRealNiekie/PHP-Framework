@@ -42,7 +42,7 @@ $router->get("/product/{id:number}", [ProductController::class, "show"]);
 
 $router->get("/wegen", [WegenController::class, "wegen"]);
 
-$router->get("/wegen/nieuw", [NieuweWegenController::class, "nieuwewegen"]);
+$router->get('/wegen/nieuw', [WegenController::class, 'nieuwewegen']);
 
 $response = $router->dispatch($request);
 
