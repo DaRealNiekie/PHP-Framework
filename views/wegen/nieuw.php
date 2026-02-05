@@ -1,4 +1,5 @@
-<?php $this->layout("layout", ["title" => "Homepage"]) ?>
+<?php $this->layout("layout", ["title" => "nieuw"]) ?>
+
 
 <h1>Welcome</h1>
 

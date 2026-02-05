@@ -15,5 +15,16 @@ class WegenController extends AbstractController
         return $this->render("wegen/index");
 
     }
+    public function nieuwewegen(): ResponseInterface
+    {
+        $contents = $this->renderer->render("wegen/nieuw");
 
+        $stream = $this->factory->createStream($contents);
+
+        $response = $this->factory->createResponse(200);
+
+        $response = $response->withBody($stream);
+
+        return $response;
+    }
 }
