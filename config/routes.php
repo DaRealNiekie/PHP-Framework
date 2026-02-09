@@ -3,10 +3,10 @@
 use App\Controllers\HomeController;
 use App\Controllers\ProductController;
 use App\Controllers\WegenController;
-use league\Route\Router;
+use League\Route\Router;
 
 
-return function (router $router) {
+return function (Router $router) {
 
     $router->get("/", [HomeController::class, "index"]);
 
