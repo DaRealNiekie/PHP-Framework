@@ -16,7 +16,7 @@ require APP_ROOT . "/vendor/autoload.php";
 $dotenv = Dotenv::createImmutable(APP_ROOT);
 $dotenv->load();
 
-$env = $_ENV["APP_ENV"] ?? "prod";
+$env = $_ENV['APP_ENV'] ?? $_SERVER['APP_ENV'] ?? (getenv('APP_ENV') ?: 'prod');
 
 require $env === "dev"
     ? APP_ROOT . "/config/errors_dev.php"
@@ -52,9 +52,15 @@ try {
         require APP_ROOT . "/views/404.html";
         exit;
     }
+} catch (\Throwable $e) {
+    http_response_code(404);
+    require APP_ROOT . "/views/404.html";
+    exit;
 }
-$response = $router->dispatch($request);
+
+while (ob_get_level() > 0) {
+    ob_end_clean();
+}
 
 $emitter = new SapiEmitter();
-
 $emitter->emit($response);

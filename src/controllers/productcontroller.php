@@ -13,8 +13,6 @@ use PDO;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-
-
 class ProductController extends AbstractController
 {
     public function __construct(private EntityManagerInterface $em)
@@ -41,7 +39,6 @@ class ProductController extends AbstractController
         return $this->render("product/show", [
             "product" => $product
         ]);
-
     }
 
     public function create(ServerRequestInterface $reqeust): ResponseInterface

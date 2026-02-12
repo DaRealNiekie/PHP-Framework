@@ -16,7 +16,16 @@ return function (Router $router) {
 
     $router->map(["GET", "POST"], "/product/new", [ProductController::class, "create"]);
 
-    $router->get("/wegen", [WegenController::class, "wegen"]);
+    $router->get("/wegen", [WegenController::class, "index"]);
 
-    $router->get('/wegen/nieuw', [WegenController::class, 'nieuwewegen']);
+    $router->get("/wegen/nieuw", [WegenController::class, "nieuw"]);
+
+    $router->post("/wegen", [WegenController::class, "create"]);
+
+    $router->get("/wegen/{id:number}", [WegenController::class, "show"]);
+
+    $router->get("/wegen/{id:number}/bewerken", [WegenController::class, "edit"]);
+
+    $router->post("/wegen/{id:number}/update", [WegenController::class, "update"]);
+
 };

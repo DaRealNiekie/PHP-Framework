@@ -1,1 +1,2 @@
 FallbackResource index.php
+RewriteRule ^(.+)/$ /$1 [L,R=301]

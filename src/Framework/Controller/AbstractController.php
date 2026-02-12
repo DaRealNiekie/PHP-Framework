@@ -29,7 +29,7 @@ abstract class AbstractController
     }
     protected function redirect(string $path): ResponseInterface
     {
-        $response = $this->factory->createResponse(302);
+        $response = $this->factory->createResponse(303);
 
         $response = $response->withheader("location", $path);
 
